@@ -227,7 +227,7 @@ function mailusers_add_pages() {
 	if (current_user_can('manage_options')) {
 		add_options_page( __('Email Users', MAILUSERS_I18N_DOMAIN),
 			__('Email Users', MAILUSERS_I18N_DOMAIN),
-			8,
+			0,
 			'email-users/email_users_options_form.php' );
 	}
 		
@@ -237,7 +237,7 @@ function mailusers_add_pages() {
 		
 		add_menu_page(__('Email', POST_TEMPLATES_I18N_DOMAIN), 
 			__('Email', POST_TEMPLATES_I18N_DOMAIN), 
-			8,
+			0,
 			__FILE__,
 			'email_users_overview',
 			WP_CONTENT_URL . '/plugins/email-users/images/email.png' );
@@ -245,19 +245,19 @@ function mailusers_add_pages() {
 		add_submenu_page(__FILE__,
 			__('Send to user(s)', POST_TEMPLATES_I18N_DOMAIN),
 			__('Send to user(s)', POST_TEMPLATES_I18N_DOMAIN),
-			8,
+			0,
 			'email-users/email_users_user_mail_form.php' );
 		
 		add_submenu_page(__FILE__,
 			__('Send to group(s)', POST_TEMPLATES_I18N_DOMAIN),
 			__('Send to group(s)', POST_TEMPLATES_I18N_DOMAIN),
-			8,
+			0,
 			'email-users/email_users_group_mail_form.php' );
 
 		add_submenu_page(__FILE__,
 			__('Notify user(s)', POST_TEMPLATES_I18N_DOMAIN),
 			__('Notify user(s)', POST_TEMPLATES_I18N_DOMAIN),
-			8,
+			0,
 			'email-users/email_users_notify_form.php' );
 	}
 }
