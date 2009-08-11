@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Email Users
-Version: 3.1.7
+Version: 3.1.8
 Plugin URI: http://email-users.vincentprat.info
 Description: Allows the site editors to send an e-mail to the blog users. Credits to <a href="http://www.catalinionescu.com">Catalin Ionescu</a> who gave me some ideas for the plugin and has made a similar plugin. Bug reports and corrections by Cyril Crua and Pokey. Updated to work with Wordpress >= 2.8.2 by Blair McMillan.
 Author: Vincent Prat (email : vpratfr@yahoo.fr)
@@ -26,7 +26,7 @@ Author URI: http://www.vincentprat.info
 */
 
 // Version of the plugin
-define( 'MAILUSERS_CURRENT_VERSION', '3.1.7' );
+define( 'MAILUSERS_CURRENT_VERSION', '3.1.8' );
 
 // i18n plugin domain
 define( 'MAILUSERS_I18N_DOMAIN', 'email-users' );
@@ -87,6 +87,10 @@ function mailusers_plugin_activation() {
 			'mailusers_max_bcc_recipients',
 			'0',
 			'Mail User - Maximum number of recipients in the BCC field' );
+		add_option(
+			'mailusers_excerpt_alt',
+			'blank',
+			'Mail User - What gets displayed when a post has an empty excerpt' );
 
 		mailusers_add_default_capabilities();
 		mailusers_add_default_user_meta();
@@ -107,6 +111,10 @@ function mailusers_plugin_activation() {
 			'mailusers_max_bcc_recipients',
 			'0',
 			'Mail User - Maximum number of recipients in the BCC field' );
+		add_option(
+			'mailusers_excerpt_alt',
+			'blank',
+			'Mail User - What gets displayed when a post has an empty excerpt' );
 
 		delete_option('mailusers_mail_user_level');
 		delete_option('mailusers_mail_method');
@@ -123,6 +131,10 @@ function mailusers_plugin_activation() {
 		mailusers_add_default_capabilities();
 		mailusers_add_default_user_meta();
 	} else {
+		add_option(
+			'mailusers_excerpt_alt',
+			'blank',
+			'Mail User - What gets displayed when a post has an empty excerpt' );
 	}
 
 	// Update version number
@@ -313,6 +325,20 @@ function mailusers_user_profile_update() {
 	} else {
 		update_usermeta($user_ID, MAILUSERS_ACCEPT_MASS_EMAIL_USER_META, 'false');
 	}
+}
+
+/**
+ * Wrapper for the option 'mailusers_excerpt_alt'
+ */
+function mailusers_get_excerpt_alt() {
+	return stripslashes(get_option( 'mailusers_excerpt_alt' ));
+}
+
+/**
+ * Wrapper for the option 'mailusers_excerpt_alt'
+ */
+function mailusers_update_excerpt_alt( $excerpt_alt ) {
+	return update_option( 'mailusers_excerpt_alt', stripslashes($excerpt_alt) );
 }
 
 /**
@@ -691,7 +717,7 @@ function mailusers_send_mail($recipients = array(), $subject = '', $message = ''
 	return $num_sent;
 }
 
-function email_users_overview(){
+function email_users_overview() {
     include('email_users_overview.php');
 }
 ?>
