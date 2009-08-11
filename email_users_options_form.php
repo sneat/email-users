@@ -64,6 +64,11 @@
 		$mailusers_updated = true;
 	}
 
+	if ( isset( $_POST['excerpt_alt'] ) ) {
+		mailusers_update_excerpt_alt( $_POST['excerpt_alt'] );
+		$mailusers_updated = true;
+	}
+
 	if ($_POST['send']) {
 	    ?>
 	    <div class="updated fade">
@@ -107,18 +112,18 @@
 	<table class="form-table" width="100%" cellspacing="2" cellpadding="5">
 	<tr>
 		<th scope="row" valign="top">
-			<label for="mail_format"><?php _e('Mail format', MAILUSERS_I18N_DOMAIN); ?></th>
+			<label for="mail_format"><?php _e('Mail format', MAILUSERS_I18N_DOMAIN); ?></label></th>
 		<td>
-			<select name="default_mail_format" style="width: 158px;">
+			<select name="default_mail_format" id="mail_format" style="width: 158px;">
 				<option value="html" <?php if (mailusers_get_default_mail_format()=='html') echo 'selected="true"'; ?>><?php _e('HTML', MAILUSERS_I18N_DOMAIN); ?></option>
 				<option value="plaintext" <?php if (mailusers_get_default_mail_format()=='plaintext') echo 'selected="true"'; ?>><?php _e('Plain text', MAILUSERS_I18N_DOMAIN); ?></option>
 			</select> <?php _e('Send mails as plain text or HTML by default?', MAILUSERS_I18N_DOMAIN); ?></td>
 	</tr>
 	<tr>
 		<th scope="row" valign="top">
-			<label for="max_bcc_recipients"><?php _e('BCC limit', MAILUSERS_I18N_DOMAIN); ?></th>
+			<label for="max_bcc_recipients"><?php _e('BCC limit', MAILUSERS_I18N_DOMAIN); ?></label></th>
 		<td>
-			<select name="max_bcc_recipients" style="width: 158px;">
+			<select name="max_bcc_recipients" id="max_bcc_recipients" style="width: 158px;">
 				<option value="0" <?php if (mailusers_get_max_bcc_recipients()=='0') echo 'selected="true"'; ?>><?php _e('None', MAILUSERS_I18N_DOMAIN); ?></option>
 				<option value="30" <?php if (mailusers_get_max_bcc_recipients()=='30') echo 'selected="true"'; ?>>30</option>
 			</select> <?php _e('Try 30 if you have problems sending emails to many users (some providers forbid too many recipients in BCC field).', MAILUSERS_I18N_DOMAIN); ?>
@@ -126,18 +131,27 @@
 	</tr>
 	<tr>
 		<th scope="row" valign="top">
-			<label for="default_subject"><?php _e('Default notification subject', MAILUSERS_I18N_DOMAIN); ?></th>
+			<label for="default_subject"><?php _e('Default notification subject', MAILUSERS_I18N_DOMAIN); ?></label></th>
 		<td>
-			<input type="text" name="default_subject" style="width: 550px;" 
+			<input type="text" name="default_subject" id="default_subject" style="width: 550px;"
 				value="<?php echo format_to_edit(mailusers_get_default_subject()); ?>" 
 				size="80" /></td>
 	</tr>
 	<tr>
 		<th scope="row" valign="top">
-			<label for="default_body"><?php _e('Default notification body', MAILUSERS_I18N_DOMAIN); ?></th>
+			<label for="default_body"><?php _e('Default notification body', MAILUSERS_I18N_DOMAIN); ?></label></th>
 		<td>
 			<textarea rows="10" cols="80" name="default_body" id="default_body" style="width: 550px;"><?php echo mailusers_get_default_body(); ?></textarea>
 		</td>
+	</tr>
+	<tr>
+		<th scope="row" valign="top">
+			<label for="excerpt_alt"><?php _e('Excerpt alternative', MAILUSERS_I18N_DOMAIN); ?></label></th>
+		<td>
+			<select name="excerpt_alt" id="excerpt_alt">
+				<option value="full" <?php if (mailusers_get_excerpt_alt()=='full') echo 'selected="true"'; ?>><?php _e('Display the full post content', MAILUSERS_I18N_DOMAIN); ?></option>
+				<option value="blank" <?php if (mailusers_get_excerpt_alt()=='blank') echo 'selected="true"'; ?>><?php _e('Display nothing', MAILUSERS_I18N_DOMAIN); ?></option>
+			</select> <?php _e('If a post excerpt is empty, what should be displayed instead?', MAILUSERS_I18N_DOMAIN); ?></td>
 	</tr>
 	</table>
 
@@ -184,7 +198,7 @@
 		$post_title = $post->post_title;
 		$post_url = get_permalink( $post_id );
 		$post_content = $post->post_content;
-		$post_excerpt = $post->post_excerpt;
+		$post_excerpt = ( mailusers_get_excerpt_alt() == 'full' && trim($post->post_excerpt) == '') ? $post->post_content : $post->post_excerpt;
 		
 		$subject = mailusers_replace_post_templates($subject, $post_title, $post_excerpt, $post_url);
 		$mail_content = mailusers_replace_post_templates($mail_content, $post_title, $post_excerpt, $post_url);

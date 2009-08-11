@@ -133,7 +133,7 @@
 	$post_title = $post->post_title;
 	$post_url = get_permalink( $post_id );
 	$post_content = $post->post_content;
-	$post_excerpt = $post->post_excerpt;
+	$post_excerpt = ( mailusers_get_excerpt_alt() == 'full' && trim($post->post_excerpt) == '') ? $post->post_content : $post->post_excerpt;
 	
 	$subject = mailusers_replace_post_templates($subject, $post_title, $post_excerpt, $post_url);
 	$mail_content = mailusers_replace_post_templates($mail_content, $post_title, $post_excerpt, $post_url);
